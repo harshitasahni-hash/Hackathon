@@ -2,7 +2,8 @@ from pydantic import BaseModel
 from dotenv import load_dotenv
 load_dotenv()
 import os
-from fastapi import FastAPI, UploadFile, File
+# The fix is here: import HTTPException alongside FastAPI, UploadFile, and File
+from fastapi import FastAPI, UploadFile, File, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import FileResponse
 from docx import Document
@@ -39,8 +40,9 @@ async def favicon():
     try:
         return FileResponse("favicon.ico")
     except FileNotFoundError:
+        # The fix is here: HTTPException is now properly imported
         raise HTTPException(status_code=404, detail="Favicon not found")
- 
+
 # Store last uploaded text for Q&A
 last_uploaded_text = ""
 
