@@ -35,9 +35,12 @@ app.add_middleware(
 # ===== Favicon route =====
 @app.get("/favicon.ico")
 async def favicon():
-    # Make sure favicon.ico exists in project folder
-    return FileResponse("favicon.ico") 
-
+    # Handle the case where the favicon file is missing
+    try:
+        return FileResponse("favicon.ico")
+    except FileNotFoundError:
+        raise HTTPException(status_code=404, detail="Favicon not found")
+ 
 # Store last uploaded text for Q&A
 last_uploaded_text = ""
 
@@ -157,3 +160,4 @@ async def ask_question(payload: Question):
         answer_text = f"❌ Error: {str(e)}"
 
     return {"answer": answer_text}
+
