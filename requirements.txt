@@ -1,5 +1,7 @@
 fastapi
+python-dotenv
 uvicorn
 python-multipart
 PyMuPDF
 python-docx
+
