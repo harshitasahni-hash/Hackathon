@@ -13,11 +13,13 @@ import json
 # =======================
 # Configure Google Gemini
 # =======================
-API_KEY = os.getenv("GOOGLE_API_KEY")  # Ensure this is set in your .env
+API_KEY = os.getenv("GOOGLE_API_KEY") 
 if not API_KEY:
     raise RuntimeError("❌ GOOGLE_API_KEY not set in environment variables")
 
-genai.configure(api_key=AIzaSyBuwNSCALnthy7h4JOmp23hKllVRHkE09E*)
+# The fix is here: reading the API key from the environment variable
+# genai.configure(api_key=AIzaSyBuwNSCALnthy7h4JOmp23hKllVRHkE09E*) # old line with SyntaxError
+genai.configure(api_key=API_KEY)
 
 app = FastAPI()
 
@@ -33,7 +35,8 @@ app.add_middleware(
 # ===== Favicon route =====
 @app.get("/favicon.ico")
 async def favicon():
-    return FileResponse("favicon.ico")  # Make sure favicon.ico exists in project folder
+    # Make sure favicon.ico exists in project folder
+    return FileResponse("favicon.ico") 
 
 # Store last uploaded text for Q&A
 last_uploaded_text = ""
@@ -154,4 +157,3 @@ async def ask_question(payload: Question):
         answer_text = f"❌ Error: {str(e)}"
 
     return {"answer": answer_text}
-
